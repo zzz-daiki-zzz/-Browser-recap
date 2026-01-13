@@ -1,0 +1,908 @@
+/* Wrapped Style - Git Wrapped風のUI */
+
+:root {
+  --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --gradient-4: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  --gradient-5: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  --gradient-6: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+  --gradient-7: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-8: linear-gradient(135deg, #ee5a6f 0%, #f78ca0 100%);
+  
+  --text-light: #ffffff;
+  --text-dark: rgba(0, 0, 0, 0.8);
+  --shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: #0f0f1a;
+  color: var(--text-light);
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ローディング画面 */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  z-index: 100;
+}
+
+.loading-content {
+  text-align: center;
+}
+
+.loading-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  animation: bounce 1s infinite;
+}
+
+.loading-icon-img {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 20px;
+  animation: bounce 1s infinite;
+  border-radius: 20px;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.loading-content h2 {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 24px;
+  opacity: 0.9;
+}
+
+.loading-bar {
+  width: 200px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.loading-progress {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 2px;
+  animation: loading 2s ease-out forwards;
+}
+
+@keyframes loading {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+/* メインラップドコンテナ */
+.wrapped-container {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* 自動進行プログレスバー */
+.auto-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  z-index: 200;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.auto-progress-bar.active {
+  opacity: 1;
+}
+
+.auto-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: rgba(255, 255, 255, 0.9);
+  transition: width 0.1s linear;
+}
+
+/* カード */
+.card {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.card.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.card.prev {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+
+/* ボックス開きアニメーション用コンテナ */
+.card-content-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* ボックスフレーム */
+.content-box {
+  position: relative;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  padding: 40px 24px;
+  transform: scale(0) rotateX(90deg);
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.card.active .content-box {
+  transform: scale(1) rotateX(0deg);
+  opacity: 1;
+}
+
+/* 最初のカードはボックスなし */
+.card-intro .card-content {
+  background: none;
+  border: none;
+  backdrop-filter: none;
+}
+
+.card-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.gradient-1 { background: var(--gradient-1); }
+.gradient-2 { background: var(--gradient-2); }
+.gradient-3 { background: var(--gradient-3); }
+.gradient-4 { background: var(--gradient-4); }
+.gradient-5 { background: var(--gradient-5); }
+.gradient-6 { background: var(--gradient-6); }
+.gradient-7 { background: var(--gradient-7); }
+.gradient-8 { background: var(--gradient-8); }
+
+.card-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 40px 24px;
+  max-width: 400px;
+  width: 90%;
+  margin: 0 auto;
+}
+
+/* 2ページ目以降のボックススタイル（最初と最後のカードは除く） */
+.card:not(.card-intro):not(.card-summary) .card-content {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transform: scale(0.9) perspective(1000px) rotateX(20deg);
+  opacity: 0;
+  max-height: 80px;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.card.active:not(.card-intro):not(.card-summary) .card-content {
+  transform: scale(1) perspective(1000px) rotateX(0deg);
+  opacity: 1;
+  max-height: 600px;
+  transition: opacity 0.3s ease,
+              transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+              max-height 1s cubic-bezier(0.34, 1.56, 0.64, 1) 1.5s;
+}
+
+/* 最後のサマリーカード（アニメーションなし） */
+.card-summary .card-content {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* イントロカード */
+.intro-year {
+  font-size: 6rem;
+  font-weight: 900;
+  line-height: 1;
+  opacity: 0.3;
+  margin-bottom: -20px;
+}
+
+.card-intro h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+.intro-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  margin-bottom: 60px;
+}
+
+.tap-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 1rem;
+  opacity: 0.8;
+  animation: pulse 2s infinite;
+}
+
+.tap-icon {
+  font-size: 1.5rem;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+/* 統計カード */
+.stat-label {
+  font-size: 1.1rem;
+  opacity: 0;
+  margin-bottom: 20px;
+  font-weight: 500;
+  transform: translateY(0);
+  transition: opacity 0.3s ease;
+}
+
+.card.active .stat-label {
+  opacity: 0.9;
+}
+
+.stat-big-number {
+  margin-bottom: 16px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition-delay: 2s;
+}
+
+.card.active .stat-big-number {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stat-big-number .number {
+  font-size: 7rem;
+  font-weight: 900;
+  line-height: 1;
+  display: inline-block;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+.stat-big-number .unit {
+  font-size: 2rem;
+  font-weight: 600;
+  opacity: 0.9;
+  margin-left: 8px;
+}
+
+.stat-sub {
+  font-size: 1rem;
+  opacity: 0;
+  margin-bottom: 12px;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+  transition-delay: 2.3s;
+}
+
+.card.active .stat-sub {
+  opacity: 0.85;
+  transform: translateY(0);
+}
+
+.stat-context {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-top: 20px;
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+  transition-delay: 5.9s;
+}
+  transition: all 0.4s ease;
+  transition-delay: 2.5s;
+}
+
+.card.active .stat-context {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 性格カード */
+.personality-icon {
+  font-size: 6rem;
+  margin-bottom: 16px;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition-delay: 2s;
+}
+
+.card.active .personality-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.personality-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition-delay: 2.2s;
+}
+
+.card.active .personality-title {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.personality-desc {
+  font-size: 1.1rem;
+  opacity: 0;
+  margin-bottom: 30px;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+  transition-delay: 2.4s;
+}
+
+.card.active .personality-desc {
+  opacity: 0.9;
+  transform: translateY(0);
+}
+
+.time-breakdown {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+  transition-delay: 2.6s;
+}
+
+.card.active .time-breakdown {
+  opacity: 1;
+  transform: translateY(0);
+}
+  flex-wrap: wrap;
+}
+
+.time-item {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 12px 16px;
+  border-radius: 12px;
+  text-align: center;
+  min-width: 70px;
+}
+
+.time-item .time-period {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.time-item .time-percent {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+/* 連続日数カード */
+.streak-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.streak-fire {
+  font-size: 5rem;
+  animation: fire 0.5s infinite alternate;
+}
+
+@keyframes fire {
+  0% { transform: scale(1) rotate(-5deg); }
+  100% { transform: scale(1.1) rotate(5deg); }
+}
+
+/* カレンダーカード */
+.mini-calendar-wrapper {
+  overflow-x: auto;
+  padding: 20px 0;
+  margin: 0 -24px;
+  padding: 20px 24px;
+}
+
+.mini-calendar {
+  display: flex;
+  gap: 3px;
+  justify-content: center;
+}
+
+.mini-week {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.mini-day {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.mini-day.level-1 { background: rgba(255, 255, 255, 0.35); }
+.mini-day.level-2 { background: rgba(255, 255, 255, 0.55); }
+.mini-day.level-3 { background: rgba(255, 255, 255, 0.75); }
+.mini-day.level-4 { background: rgba(255, 255, 255, 0.95); }
+
+.calendar-stats {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.cal-stat {
+  font-size: 1rem;
+}
+
+.cal-stat strong {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* まとめカード */
+.card-summary h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.summary-item {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 20px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.summary-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.summary-value {
+  font-size: 1.8rem;
+  font-weight: 800;
+  display: block;
+}
+
+.summary-label {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.summary-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.25);
+  padding: 16px 28px;
+  border-radius: 40px;
+  margin-bottom: 30px;
+}
+
+.badge-icon {
+  font-size: 1.8rem;
+}
+
+.badge-text {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.summary-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  background: rgba(255, 255, 255, 0.95);
+  color: #333;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.action-btn.secondary {
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+}
+
+/* ナビゲーション */
+.navigation {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+
+.progress-dots {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+.progress-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: all 0.3s;
+}
+
+.progress-dot.active {
+  background: white;
+  transform: scale(1.3);
+}
+
+.progress-dot.completed {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.nav-buttons {
+  position: absolute;
+  right: 20px;
+  display: flex;
+  gap: 12px;
+}
+
+.nav-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: white;
+}
+
+.nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* データなし画面 */
+.no-data-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+.no-data-content {
+  text-align: center;
+  padding: 40px;
+}
+
+.no-data-icon {
+  font-size: 5rem;
+  margin-bottom: 20px;
+}
+
+.no-data-content h2 {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+}
+
+.no-data-content p {
+  opacity: 0.7;
+  margin-bottom: 30px;
+}
+
+.back-btn {
+  display: inline-block;
+  padding: 14px 28px;
+  background: var(--gradient-1);
+  color: white;
+  text-decoration: none;
+  border-radius: 30px;
+  font-weight: 600;
+  transition: transform 0.2s;
+}
+
+.back-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* アニメーション */
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* カウントアップアニメーション用 */
+.counting {
+  animation: countPulse 0.1s ease-out;
+}
+
+@keyframes countPulse {
+  0% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* レスポンシブ */
+@media (max-width: 400px) {
+  .intro-year {
+    font-size: 4rem;
+  }
+  
+  .card-intro h1 {
+    font-size: 2.2rem;
+  }
+  
+  .stat-big-number .number {
+    font-size: 5rem;
+  }
+  
+  .stat-big-number .unit {
+    font-size: 1.5rem;
+  }
+  
+  .personality-icon {
+    font-size: 4rem;
+  }
+  
+  .personality-title {
+    font-size: 2rem;
+  }
+  
+  .summary-grid {
+    gap: 10px;
+  }
+  
+  .summary-item {
+    padding: 14px;
+  }
+  
+  .summary-value {
+    font-size: 1.4rem;
+  }
+}
+
+/* スワイプヒント */
+.swipe-hint {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+  font-size: 0.9rem;
+  opacity: 0;
+  animation: hintFade 3s ease-out forwards;
+  animation-delay: 1s;
+}
+
+@keyframes hintFade {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; display: none; }
+}
+
+/* 音楽プレイヤー */
+.music-player {
+  position: fixed;
+  bottom: 80px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 10px 14px;
+  border-radius: 30px;
+  z-index: 100;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.play-pause-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.play-pause-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.player-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.music-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 80px;
+}
+
+.music-title {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+.music-progress {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.music-progress-bar {
+  width: 0%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 2px;
+  transition: width 0.1s linear;
+}
+
+.mute-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  opacity: 0.7;
+}
+
+.mute-btn:hover {
+  opacity: 1;
+}
+
+@media (max-width: 400px) {
+  .music-player {
+    bottom: 70px;
+    left: 15px;
+    padding: 8px 12px;
+    gap: 8px;
+  }
+  
+  .play-pause-btn {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .music-info {
+    min-width: 60px;
+  }
+  
+  .music-title {
+    font-size: 0.7rem;
+  }
+}

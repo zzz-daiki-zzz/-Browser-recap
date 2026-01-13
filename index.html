@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#6366f1">
+    <title>Your Recap 2026</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon.svg">
+    <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+    <link rel="stylesheet" href="wrapped-style.css">
+</head>
+<body>
+    <!-- ローディング画面 -->
+    <div id="loading" class="loading-screen">
+        <div class="loading-content">
+            <img src="icons/icon-192.png" alt="Recap" class="loading-icon-img">
+            <h2>Recapを準備中...</h2>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- メインラップドコンテナ -->
+    <div id="wrapped" class="wrapped-container" style="display: none;">
+        
+        <!-- 自動進行プログレスバー -->
+        <div id="autoProgressBar" class="auto-progress-bar">
+            <div class="auto-progress-fill" id="autoProgressFill"></div>
+        </div>
+        
+        <!-- カード0 -->
+        <div class="card card-intro active" data-index="0">
+            <div class="card-bg gradient-1"></div>
+            <div class="card-content">
+                <h1>Your Recap</h1>
+                <p class="intro-subtitle">あなたの利用を振り返ろう</p>
+                <div class="tap-hint">
+                    <span class="tap-icon">👆</span>
+                    <span>タップして始める</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- カード1 -->
+        <div class="card card-stats" data-index="1">
+            <div class="card-bg gradient-2"></div>
+            <div class="card-content">
+                <div class="stat-label">アプリを開いた日数は...</div>
+                <div class="stat-big-number" id="wTotalDays">
+                    <span class="number">0</span>
+                    <span class="unit">日</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- カード2 -->
+        <div class="card card-stats" data-index="2">
+            <div class="card-bg gradient-3"></div>
+            <div class="card-content">
+                <div class="stat-label">起動した回数は...</div>
+                <div class="stat-big-number" id="wTotalLaunches">
+                    <span class="number">0</span>
+                    <span class="unit">回</span>
+                </div>
+                <div class="stat-sub" id="wAvgLaunches">1日平均 0回</div>
+            </div>
+        </div>
+
+        <!-- カード3 -->
+        <div class="card card-stats" data-index="3">
+            <div class="card-bg gradient-4"></div>
+            <div class="card-content">
+                <div class="stat-label">合計滞在時間は...</div>
+                <div class="stat-big-number" id="wTotalTime">
+                    <span class="number">0</span>
+                    <span class="unit">分</span>
+                </div>
+                <div class="stat-sub" id="wAvgTime">平均 0分/回</div>
+                <div class="stat-context" id="wTimeContext"></div>
+            </div>
+        </div>
+
+        <!-- カード4 -->
+        <div class="card card-personality" data-index="4">
+            <div class="card-bg gradient-5"></div>
+            <div class="card-content">
+                <div class="stat-label">あなたは...</div>
+                <div class="personality-icon" id="wPersonalityIcon">🌙</div>
+                <div class="personality-title" id="wPersonalityTitle">夜型ユーザー</div>
+                <div class="personality-desc" id="wPersonalityDesc">
+                    夜の時間帯に最もアクティブでした
+                </div>
+                <div class="time-breakdown" id="wTimeBreakdown">
+                    <!-- 時間帯の内訳 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- カード5 -->
+        <div class="card card-streak" data-index="5">
+            <div class="card-bg gradient-6"></div>
+            <div class="card-content">
+                <div class="stat-label">連続記録は...</div>
+                <div class="streak-display">
+                    <div class="streak-fire">🔥</div>
+                    <div class="stat-big-number" id="wMaxStreak">
+                        <span class="number">0</span>
+                        <span class="unit">日連続</span>
+                    </div>
+                </div>
+                <div class="stat-sub" id="wCurrentStreak">現在の連続: 0日</div>
+            </div>
+        </div>
+
+        <!-- カード6 -->
+        <div class="card card-calendar" data-index="6">
+            <div class="card-bg gradient-7"></div>
+            <div class="card-content">
+                <div class="stat-label">あなたの1年間</div>
+                <div class="calendar-stats" id="wCalendarStats">
+                    <span class="cal-stat"><strong id="wActiveDays">0</strong> 日アクティブ</span>
+                    <span class="cal-stat"><strong id="wActivePercent">0</strong>% の日</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- カード7 -->
+        <div class="card card-summary" data-index="7">
+            <div class="card-bg gradient-8"></div>
+            <div class="card-content">
+                <h2>2026年のあなた</h2>
+                <div class="summary-grid" id="wSummaryGrid">
+                    <div class="summary-item">
+                        <span class="summary-icon">📅</span>
+                        <span class="summary-value" id="wSumDays">0日</span>
+                        <span class="summary-label">利用</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-icon">🚀</span>
+                        <span class="summary-value" id="wSumLaunches">0回</span>
+                        <span class="summary-label">起動</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-icon">⏱️</span>
+                        <span class="summary-value" id="wSumTime">0分</span>
+                        <span class="summary-label">滞在</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-icon">🔥</span>
+                        <span class="summary-value" id="wSumStreak">0日</span>
+                        <span class="summary-label">連続</span>
+                    </div>
+                </div>
+                <div class="summary-actions">
+                    <button id="restartBtn" class="action-btn">
+                        もう一度見る
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ナビゲーション -->
+    <div id="navigation" class="navigation" style="display: none;">
+        <div class="progress-dots" id="progressDots">
+        </div>
+        <div class="nav-buttons">
+            <button id="prevBtn" class="nav-btn" disabled>
+                <span>←</span>
+            </button>
+            <button id="nextBtn" class="nav-btn">
+                <span>→</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- データなし画面 -->
+    <div id="noData" class="no-data-screen" style="display: none;">
+        <div class="no-data-content">
+            <div class="no-data-icon">📭</div>
+            <h2>まだデータがありません</h2>
+            <p>アプリを使い続けると、あなたのRecapが作成されます</p>
+            <a href="index.html" class="back-btn">トップに戻る</a>
+        </div>
+    </div>
+
+    <script src="tracker.js"></script>
+    <script src="wrapped-app.js"></script>
+</body>
+</html>

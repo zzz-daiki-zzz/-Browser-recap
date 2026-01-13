@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6366f1">
+    <title>Recap - あなたの利用分析</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon.svg">
+    <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-link">← 戻る</a>
+            <h1>📊 Your Recap</h1>
+            <p class="subtitle">あなたの利用パターン</p>
+        </header>
+
+        <main>
+            <!-- サマリーカード -->
+            <section class="summary-cards">
+                <div class="summary-card">
+                    <span class="summary-value" id="totalDays">-</span>
+                    <span class="summary-label">利用日数</span>
+                </div>
+                <div class="summary-card">
+                    <span class="summary-value" id="totalLaunches">-</span>
+                    <span class="summary-label">起動回数</span>
+                </div>
+                <div class="summary-card">
+                    <span class="summary-value" id="avgDuration">-</span>
+                    <span class="summary-label">平均滞在</span>
+                </div>
+                <div class="summary-card">
+                    <span class="summary-value" id="streak">-</span>
+                    <span class="summary-label">最大連続</span>
+                </div>
+            </section>
+
+            <!-- 1️⃣ PWA起動 Recap -->
+            <section class="recap-section">
+                <h2><span class="section-icon">📱</span> PWA起動 Recap</h2>
+                <div class="recap-content">
+                    <div class="stat-row">
+                        <span class="stat-label">総起動回数</span>
+                        <span class="stat-value" id="launchCount">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">利用開始日</span>
+                        <span class="stat-value" id="firstUseDate">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">最終利用日</span>
+                        <span class="stat-value" id="lastUseDate">-</span>
+                    </div>
+                    <div class="personality-badge" id="launchPersonality">
+                        <span class="badge-icon">🌙</span>
+                        <span class="badge-text">分析中...</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2️⃣ ブラウザ滞在 Recap -->
+            <section class="recap-section">
+                <h2><span class="section-icon">🌐</span> ブラウザ滞在 Recap</h2>
+                <div class="recap-content">
+                    <div class="stat-row">
+                        <span class="stat-label">総滞在時間</span>
+                        <span class="stat-value" id="totalDuration">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">平均滞在時間</span>
+                        <span class="stat-value" id="avgSessionDuration">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">最長滞在</span>
+                        <span class="stat-value" id="maxDuration">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">セッション数</span>
+                        <span class="stat-value" id="sessionCount">-</span>
+                    </div>
+                    <div class="personality-badge" id="durationPersonality">
+                        <span class="badge-icon">⚡</span>
+                        <span class="badge-text">分析中...</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4️⃣ 時間帯性格 Recap -->
+            <section class="recap-section">
+                <h2><span class="section-icon">⏰</span> 時間帯性格 Recap</h2>
+                <div class="recap-content">
+                    <div class="time-chart" id="timeChart">
+                        <!-- 24時間バーチャート -->
+                    </div>
+                    <div class="time-stats">
+                        <div class="stat-row">
+                            <span class="stat-label">朝（5-11時）</span>
+                            <span class="stat-value" id="morningPercent">-</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">昼（11-17時）</span>
+                            <span class="stat-value" id="afternoonPercent">-</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">夜（17-23時）</span>
+                            <span class="stat-value" id="eveningPercent">-</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">深夜（23-5時）</span>
+                            <span class="stat-value" id="nightPercent">-</span>
+                        </div>
+                    </div>
+                    <div class="personality-badge" id="timePersonality">
+                        <span class="badge-icon">🌅</span>
+                        <span class="badge-text">分析中...</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5️⃣ アクティビティ Recap -->
+            <section class="recap-section">
+                <h2><span class="section-icon">📆</span> アクティビティ Recap</h2>
+                <div class="recap-content">
+                    <div class="stat-row">
+                        <span class="stat-label">年間利用日数</span>
+                        <span class="stat-value" id="yearlyDays">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">年間起動回数</span>
+                        <span class="stat-value" id="yearlyLaunches">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">現在の連続日数</span>
+                        <span class="stat-value" id="currentStreak">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">最大連続日数</span>
+                        <span class="stat-value" id="maxStreak">-</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- データがない場合 -->
+            <section class="no-data" id="noData" style="display: none;">
+                <div class="no-data-icon">📭</div>
+                <h3>まだデータがありません</h3>
+                <p>アプリを使い続けると、ここにあなたの利用パターンが表示されます。</p>
+                <a href="index.html" class="btn btn-primary">トップに戻る</a>
+            </section>
+        </main>
+
+        <footer>
+            <p>データは localStorage に保存されています</p>
+            <button id="resetBtn" class="btn-text">データをリセット</button>
+        </footer>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="tracker.js"></script>
+    <script src="recap-app.js"></script>
+</body>
+</html>
